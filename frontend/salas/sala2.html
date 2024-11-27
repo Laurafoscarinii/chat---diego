@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala 2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Jersey 10", sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .sidebar {
+            width: 40%;
+            background-color: #000000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 50px;
+            position: relative;
+        }
+
+        .menu-icon button {
+            background: none;
+            border: none;
+            font-size: 36px;
+            color: #fff;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .contacts {
+            margin-top: 50px;
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .contact {
+            width: 100%;
+            height: 50px;
+            background-color: #f0f0f0;
+            margin: 10px 0;
+            border-radius: 8px;
+            text-align: center;
+            line-height: 50px;
+            text-decoration: none;
+            color: black;
+            transition: background-color 0.3s;
+        }
+
+        .contact.active {
+            background-color: #cccccc;
+            color: white;
+        }
+
+        .menu-options {
+            display: none;
+            background-color: #000000;
+            width: 7%;
+            padding: 3px;
+            margin-top: 4px;
+            border-radius: 10px;
+            color: white;
+            text-align: left;
+            position: absolute;
+            top: 4px;
+            left: 5%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-options button {
+            width: 100%;
+            padding: 7px;
+            background-color: #2a5275;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 8px 0;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .main-content {
+            flex: 1;
+            position: relative;
+            background-color: #2a5275;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-list {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background-color: #ffffff;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            max-width: 60%;
+            word-wrap: break-word;
+        }
+
+        .message.sent {
+            align-self: flex-end;
+            background-color: #28a745;
+            color: #fff;
+            margin-left: auto;
+        }
+
+        .message.received {
+            align-self: flex-start;
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .message-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #ffffff;
+            border-top: 2px solid #ddd;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: #1e90ff;
+            box-shadow: 0 0 5px rgba(30, 144, 255, 0.6);
+        }
+
+        .send-button {
+            background-color: #1e90ff;
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: white;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .send-button:hover {
+            background-color: #187bcd;
+            transform: scale(1.1);
+        }
+
+        .send-button svg {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="menu-icon">
+                <button onclick="toggleMenu()">&#9776;</button>
+            </div>
+            <div class="contacts">
+                <a href="sala1.html" class="contact">Sala 1</a>
+                <a href="sala2.html" class="contact active">Sala 2</a>
+                <a href="sala3.html" class="contact">Sala 3</a>
+                <a href="sala4.html" class="contact">Sala 4</a>
+            </div>
+        </div>
+        <div class="menu-options" id="menu-options">
+            <button onclick="mostrarCriarSala()">Criar Nova Sala</button>
+            <button onclick="sairDaSala()">Sair da Sala</button>
+        </div>
+        <div class="main-content">
+            <div class="message-list" id="message-list">
+                <!-- Mensagens vão aparecer aqui -->
+            </div>
+            <div class="message-container">
+                <input type="text" class="message-input" placeholder="Digite sua mensagem..." id="messageInput">
+                <button class="send-button" onclick="sendMessage()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+                        <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para alternar o menu de opções
+        function toggleMenu() {
+            const menuOptions = document.getElementById("menu-options");
+            menuOptions.style.display = menuOptions.style.display === "block" ? "none" : "block";
+        }
+
+        // Função para enviar mensagem
+        function sendMessage() {
+            const messageInput = document.getElementById("messageInput");
+            const messageList = document.getElementById("message-list");
+            const messageText = messageInput.value.trim();
+
+            if (messageText === "") return;
+
+            const message = document.createElement("div");
+            message.className = "message sent";
+            message.textContent = messageText;
+
+            messageList.appendChild(message);
+            messageList.scrollTop = messageList.scrollHeight;
+
+            messageInput.value = "";
+        }
+
+        // Função para criar nova sala (simulação)
+        function mostrarCriarSala() {
+            alert("Aqui você pode criar uma nova sala.");
+        }
+
+        // Função para sair da sala (simulação)
+        function sairDaSala() {
+            alert("Você saiu da sala.");
+        }
+    </script>
+</body>
+</html>
