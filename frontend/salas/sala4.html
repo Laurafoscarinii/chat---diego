@@ -59,7 +59,7 @@
         .contact {
             width: 100%;
             height: 50px;
-            background-color: #f0f0f0; /* Cor mais clara por padrão */
+            background-color: #f0f0f0;
             margin: 10px 0;
             border-radius: 8px;
             text-align: center;
@@ -70,7 +70,7 @@
         }
 
         .contact.active {
-            background-color: #cccccc; /* Cor mais forte para a sala ativa */
+            background-color: #cccccc;
             color: white;
         }
 
@@ -125,18 +125,16 @@
             word-wrap: break-word;
         }
 
-        /* Mensagens enviadas para a direita */
         .message.sent {
-            align-self: flex-end; /* Garantir que fique alinhada à direita */
-            background-color: #28a745; /* Cor de fundo verde */
+            align-self: flex-end;
+            background-color: #28a745;
             color: #fff;
-            margin-left: auto; /* Para garantir que a mensagem fique no final à direita */
+            margin-left: auto;
         }
 
-        /* Mensagens recebidas para a esquerda */
         .message.received {
-            align-self: flex-start; /* Fica alinhada à esquerda */
-            background-color: #007bff; /* Cor de fundo azul */
+            align-self: flex-start;
+            background-color: #007bff;
             color: #fff;
         }
 
@@ -200,7 +198,7 @@
                 <a href="sala1.html" class="contact">Sala 1</a>
                 <a href="sala2.html" class="contact">Sala 2</a>
                 <a href="sala3.html" class="contact">Sala 3</a>
-                <a href="sala4.html" class="contact active">Sala 4</a> <!-- Sala 4 ativa -->
+                <a href="sala4.html" class="contact active">Sala 4</a>
             </div>
         </div>
         <div class="menu-options" id="menu-options">
@@ -208,9 +206,7 @@
             <button onclick="sairDaSala()">Sair da Sala</button>
         </div>
         <div class="main-content">
-            <div class="message-list" id="message-list">
-                <!-- Removido a mensagem automática de boas-vindas -->
-            </div>
+            <div class="message-list" id="message-list"></div>
             <div class="message-container">
                 <input type="text" class="message-input" placeholder="Digite sua mensagem..." id="messageInput">
                 <button class="send-button" onclick="sendMessage()">
@@ -224,6 +220,10 @@
     </div>
 
     <script>
+        const salaId = 4; // Identificador da sala 4
+
+        const apiUrl = 'https://sua-api.com/api/messages'; // URL da sua API de mensagens
+
         function toggleMenu() {
             const menuOptions = document.getElementById("menu-options");
             menuOptions.style.display = menuOptions.style.display === "block" ? "none" : "block";
@@ -236,19 +236,72 @@
 
             if (messageText === "") return;
 
-            const message = document.createElement("div");
+            const message = {
+                text: messageText,
+                roomId: salaId
+            };
 
-            // Adiciona a classe de "enviado" para mensagens suas (alinhadas à direita)
-            message.className = "message sent";
-            message.textContent = messageText;
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(message)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const messageDiv = document.createElement("div");
+                messageDiv.classList.add("message", "sent");
+                messageDiv.textContent = messageText;
+                messageList.appendChild(messageDiv);
+                messageList.scrollTop = messageList.scrollHeight;
+                messageInput.value = "";
+            })
+            .catch(error => {
+                console.error('Erro ao enviar a mensagem:', error);
+            });
+        }
 
-            messageList.appendChild(message);
+        function fetchMessages() {
+            fetch(`${apiUrl}?roomId=${salaId}`)
+                .then(response => response.json())
+                .then(messages => {
+                    const messageList = document.getElementById("message-list");
+                    messageList.innerHTML = ''; // Limpa as mensagens antes de adicionar novas
+                    messages.forEach(message => {
+                        const messageDiv = document.createElement("div");
+                        messageDiv.classList.add("message", message.sent ? "sent" : "received");
+                        messageDiv.textContent = message.text;
+                        messageList.appendChild(messageDiv);
+                    });
+                    messageList.scrollTop = messageList.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar mensagens:')
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar mensagens:', error);
+                });
+        }
 
-            messageList.scrollTop = messageList.scrollHeight;
+        // Função que carrega as mensagens iniciais quando a página é carregada
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchMessages();  // Carrega as mensagens assim que a página for carregada
 
-            messageInput.value = "";
+            // Intervalo para atualizar as mensagens a cada 5 segundos
+            setInterval(fetchMessages, 5000);
+        });
+        
+        // Função para criar uma nova sala (opcional)
+        function mostrarCriarSala() {
+            // Lógica para criar uma nova sala (pode incluir navegação ou exibição de uma interface)
+            alert("Função de criação de sala não implementada");
+        }
+
+        // Função para sair da sala (opcional)
+        function sairDaSala() {
+            window.location.href = 'index.html';  // Redireciona para a página inicial ou outra página
         }
     </script>
 </body>
 </html>
-

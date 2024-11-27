@@ -249,14 +249,13 @@
             window.location.href = "telaInicial.html";
         }
 
-        // Função para adicionar a classe 'active' dinamicamente
         window.onload = function() {
-            const sala = window.location.pathname.split('/').pop(); // Obtém o nome da página atual
+            const sala = window.location.pathname.split('/').pop(); 
             const salaLinks = document.querySelectorAll('.contact');
 
             salaLinks.forEach(link => {
                 if (link.href.includes(sala)) {
-                    link.classList.add('active'); // Adiciona a classe 'active' ao link correspondente
+                    link.classList.add('active'); 
                 }
             });
         };

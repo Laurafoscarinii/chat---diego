@@ -206,9 +206,7 @@
             <button onclick="sairDaSala()">Sair da Sala</button>
         </div>
         <div class="main-content">
-            <div class="message-list" id="message-list">
-                <!-- Mensagens vão aparecer aqui -->
-            </div>
+            <div class="message-list" id="message-list"></div>
             <div class="message-container">
                 <input type="text" class="message-input" placeholder="Digite sua mensagem..." id="messageInput">
                 <button class="send-button" onclick="sendMessage()">
@@ -221,39 +219,90 @@
         </div>
     </div>
 
+    <div class="overlay" id="overlay" onclick="fecharModal()"></div>
+    <div class="modal" id="modal">
+        <span class="modal-close" onclick="fecharModal()">×</span>
+        <h3>Criar Nova Sala</h3>
+        <input type="text" id="novoNomeSala" placeholder="Nome da Sala">
+        <button onclick="criarSala()">Criar</button>
+    </div>
+
     <script>
-        // Função para alternar o menu de opções
+        const baseURL = "https://chaaaat-iap29gydu-laura-foscarinis-projects.vercel.app/";
+
         function toggleMenu() {
             const menuOptions = document.getElementById("menu-options");
             menuOptions.style.display = menuOptions.style.display === "block" ? "none" : "block";
         }
 
-        // Função para enviar mensagem
+        function mostrarCriarSala() {
+            document.getElementById("overlay").style.display = "block";
+            document.getElementById("modal").style.display = "block";
+        }
+
+        function fecharModal() {
+            document.getElementById("overlay").style.display = "none";
+            document.getElementById("modal").style.display = "none";
+        }
+
+        function criarSala() {
+            const novoNomeSala = document.getElementById("novoNomeSala").value.trim();
+            if (novoNomeSala !== "") {
+                fetch(`${baseURL}/salas`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nome: novoNomeSala })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const novaSala = document.createElement("a");
+                        novaSala.href = `${novoNomeSala}.html`;
+                        novaSala.className = "contact";
+                        novaSala.textContent = novoNomeSala;
+                        document.querySelector(".contacts").appendChild(novaSala);
+                        fecharModal();
+                    } else {
+                        alert("Erro ao criar a sala.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro:", error);
+                    alert("Erro ao conectar à API.");
+                });
+            }
+        }
+
+        function sairDaSala() {
+            window.location.href = "/";
+        }
+
         function sendMessage() {
             const messageInput = document.getElementById("messageInput");
-            const messageList = document.getElementById("message-list");
             const messageText = messageInput.value.trim();
 
             if (messageText === "") return;
 
-            const message = document.createElement("div");
-            message.className = "message sent";
-            message.textContent = messageText;
-
-            messageList.appendChild(message);
-            messageList.scrollTop = messageList.scrollHeight;
+            const messageList = document.getElementById("message-list");
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message", "sent");
+            messageElement.textContent = messageText;
+            messageList.appendChild(messageElement);
 
             messageInput.value = "";
+            messageList.scrollTop = messageList.scrollHeight;
         }
 
-        // Função para criar nova sala (simulação)
-        function mostrarCriarSala() {
-            alert("Aqui você pode criar uma nova sala.");
-        }
-
-        // Função para sair da sala (simulação)
-        function sairDaSala() {
-            alert("Você saiu da sala.");
+        window.onload = function() {
+            const contactLinks = document.querySelectorAll('.contact');
+            contactLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    contactLinks.forEach(link => link.classList.remove('active'));
+                    e.target.classList.add('active');
+                });
+            });
         }
     </script>
 </body>

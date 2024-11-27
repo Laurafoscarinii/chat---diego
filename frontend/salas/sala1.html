@@ -133,7 +133,7 @@
             margin-left: auto; /* Para garantir que a mensagem fique no final à direita */
         }
 
-        /* Mensagens recebidas para a esquerda */
+
         .message.received {
             align-self: flex-start; /* Fica alinhada à esquerda */
             background-color: #007bff; /* Cor de fundo azul */
@@ -284,7 +284,7 @@
     </div>
 
     <script>
-        const baseURL = "http://sua-api.com"; // URL da sua API (substitua pelo correto)
+        const baseURL = "https://chaaaat-iap29gydu-laura-foscarinis-projects.vercel.app/"; // URL da sua API (substitua pelo correto)
 
         // Função de exibição do menu
         function toggleMenu() {
@@ -298,17 +298,17 @@
             document.getElementById("modal").style.display = "block";
         }
 
-        // Fecha o modal
+
         function fecharModal() {
             document.getElementById("overlay").style.display = "none";
             document.getElementById("modal").style.display = "none";
         }
 
-        // Cria uma nova sala
+
         function criarSala() {
             const novoNomeSala = document.getElementById("novoNomeSala").value.trim();
             if (novoNomeSala !== "") {
-                // Envia a requisição para criar a sala via API
+
                 fetch(`${baseURL}/salas`, {
                     method: 'POST',
                     headers: {
@@ -377,14 +377,13 @@
         // Sair da sala
         function sairDaSala() {
             if (confirm("Você deseja sair da sala?")) {
-                // Chama a API para remover o usuário da sala (se necessário)
                 fetch(`${baseURL}/salas/1/usuarios`, {
                     method: 'DELETE'
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        window.location.href = "telaInicial.html"; // Redireciona para a página inicial
+                        window.location.href = "telaInicial.html"; 
                     } else {
                         alert("Erro ao sair da sala.");
                     }

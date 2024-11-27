@@ -59,7 +59,7 @@
         .contact {
             width: 100%;
             height: 50px;
-            background-color: #f0f0f0; /* Cor mais clara por padrão */
+            background-color: #f0f0f0; 
             margin: 10px 0;
             border-radius: 8px;
             text-align: center;
@@ -70,7 +70,7 @@
         }
 
         .contact.active {
-            background-color: #cccccc; /* Cor mais forte para a sala ativa */
+            background-color: #cccccc;
             color: white;
         }
 
@@ -125,18 +125,16 @@
             word-wrap: break-word;
         }
 
-        /* Mensagens enviadas para a direita */
         .message.sent {
-            align-self: flex-end; /* Garantir que fique alinhada à direita */
-            background-color: #28a745; /* Cor de fundo verde */
+            align-self: flex-end; 
+            background-color: #28a745; 
             color: #fff;
-            margin-left: auto; /* Para garantir que a mensagem fique no final à direita */
+            margin-left: auto; 
         }
 
-        /* Mensagens recebidas para a esquerda */
         .message.received {
-            align-self: flex-start; /* Fica alinhada à esquerda */
-            background-color: #007bff; /* Cor de fundo azul */
+            align-self: flex-start; 
+            background-color: #007bff; 
             color: #fff;
         }
 
@@ -199,7 +197,7 @@
             <div class="contacts">
                 <a href="sala1.html" class="contact">Sala 1</a>
                 <a href="sala2.html" class="contact">Sala 2</a>
-                <a href="sala3.html" class="contact active">Sala 3</a> <!-- Sala 3 ativa -->
+                <a href="sala3.html" class="contact active">Sala 3</a> 
                 <a href="sala4.html" class="contact">Sala 4</a>
             </div>
         </div>
@@ -209,7 +207,7 @@
         </div>
         <div class="main-content">
             <div class="message-list" id="message-list">
-                <!-- As mensagens vão aparecer aqui -->
+
             </div>
             <div class="message-container">
                 <input type="text" class="message-input" placeholder="Digite sua mensagem..." id="messageInput">
@@ -224,30 +222,55 @@
     </div>
 
     <script>
+        const sala = 'Sala 3';
+        const usuario = 'Usuário 1'; 
+        
         function toggleMenu() {
             const menuOptions = document.getElementById("menu-options");
             menuOptions.style.display = menuOptions.style.display === "block" ? "none" : "block";
         }
 
-        function sendMessage() {
-            const messageInput = document.getElementById("messageInput");
+        async function loadMessages() {
+            const response = await fetch(`https://chaaaat-iap29gydu-laura-foscarinis-projects.vercel.app/messages/${sala}`);
+            const messages = await response.json();
             const messageList = document.getElementById("message-list");
+            messageList.innerHTML = '';
+
+            messages.forEach(msg => {
+                const message = document.createElement("div");
+                message.className = msg.usuario === usuario ? "message sent" : "message received";
+                message.textContent = msg.mensagem;
+                messageList.appendChild(message);
+            });
+
+            messageList.scrollTop = messageList.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const messageInput = document.getElementById("messageInput");
             const messageText = messageInput.value.trim();
 
             if (messageText === "") return;
 
-            const message = document.createElement("div");
+            const message = {
+                sala,
+                usuario,
+                mensagem: messageText
+            };
 
-            // Adiciona a classe de "enviado" para mensagens suas (alinhadas à direita)
-            message.className = "message sent";
-            message.textContent = messageText;
+            await fetch("https://chaaaat-iap29gydu-laura-foscarinis-projects.vercel.app/messages", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(message)
+            });
 
-            messageList.appendChild(message);
-
-            messageList.scrollTop = messageList.scrollHeight;
-
-            messageInput.value = "";
+            messageInput.value = '';
+            loadMessages();
         }
+
+        loadMessages();
     </script>
 </body>
 </html>
