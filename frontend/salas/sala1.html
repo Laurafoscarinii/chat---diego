@@ -260,7 +260,7 @@
         </div>
         <div class="main-content">
             <div class="message-list" id="message-list">
-                <!-- Mensagens irão aparecer aqui -->
+
             </div>
             <div class="message-container">
                 <input type="text" class="message-input" placeholder="Digite sua mensagem..." id="messageInput">
@@ -274,7 +274,6 @@
         </div>
     </div>
 
-    <!-- Modal -->
     <div class="overlay" id="overlay" onclick="fecharModal()"></div>
     <div class="modal" id="modal">
         <span class="modal-close" onclick="fecharModal()">×</span>
@@ -284,15 +283,15 @@
     </div>
 
     <script>
-        const baseURL = "https://chaaaat-iap29gydu-laura-foscarinis-projects.vercel.app/"; // URL da sua API (substitua pelo correto)
+        const baseURL = "https://chaaaat-iap29gydu-laura-foscarinis-projects.vercel.app/"; 
 
-        // Função de exibição do menu
+
         function toggleMenu() {
             const menuOptions = document.getElementById("menu-options");
             menuOptions.style.display = menuOptions.style.display === "block" ? "none" : "block";
         }
 
-        // Exibe o modal para criar sala
+
         function mostrarCriarSala() {
             document.getElementById("overlay").style.display = "block";
             document.getElementById("modal").style.display = "block";
@@ -319,7 +318,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Atualiza a lista de salas na sidebar
+                       
                         const novaSala = document.createElement("a");
                         novaSala.href = `${novoNomeSala}.html`;
                         novaSala.className = "contact";
@@ -338,7 +337,7 @@
             }
         }
 
-        // Enviar mensagem para a sala
+
         function sendMessage() {
             const messageInput = document.getElementById("messageInput");
             const messageList = document.getElementById("message-list");
@@ -346,7 +345,7 @@
 
             if (messageText === "") return;
 
-            // Envia a mensagem via API
+
             fetch(`${baseURL}/salas/1/mensagens`, {
                 method: 'POST',
                 headers: {
